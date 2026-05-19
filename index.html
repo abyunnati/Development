@@ -114,7 +114,7 @@
 
   <h2>Customer Reviews</h2>
 
-  <div class="review-grid">
+  <div class="review-grid" id="reviewContainer">
 
     <div class="review-card">
       <div class="stars">★★★★★</div>
@@ -149,13 +149,13 @@
 
     <h3>Share Your Experience</h3>
 
-    <form class="review-form">
+    <form class="review-form" id="reviewForm">
 
-      <input type="text" placeholder="Your Name" required>
+      <input type="text" id="reviewName" placeholder="Your Name" required>
 
       <input type="email" placeholder="Your Email" required>
 
-      <textarea placeholder="Write your review here..." rows="5" required></textarea>
+      <textarea id="reviewMessage" placeholder="Write your review here..." rows="5" required></textarea>
 
       <button type="submit">Submit Review</button>
 
@@ -191,5 +191,40 @@
 
 </footer>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  const form = document.getElementById("reviewForm");
+  const container = document.getElementById("reviewContainer");
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const name = document.getElementById("reviewName").value.trim();
+    const message = document.getElementById("reviewMessage").value.trim();
+
+    if(!name || !message){
+      return;
+    }
+
+    const reviewCard = document.createElement("div");
+    reviewCard.className = "review-card";
+
+    reviewCard.innerHTML = `
+      <div class="stars">★★★★★</div>
+      <p>“${message}”</p>
+      <h4>— ${name}</h4>
+    `;
+
+    container.prepend(reviewCard);
+
+    form.reset();
+
+  });
+
+});
+</script>
 </body>
+
 </html>
