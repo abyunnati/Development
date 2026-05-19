@@ -192,13 +192,47 @@
 </footer>
 
 
+
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
   const form = document.getElementById("reviewForm");
   const container = document.getElementById("reviewContainer");
 
+  function saveReviews(reviews){
+    localStorage.setItem("abyunnati_reviews", JSON.stringify(reviews));
+  }
+
+  function getReviews(){
+    return JSON.parse(localStorage.getItem("abyunnati_reviews")) || [];
+  }
+
+  function renderReview(review, prepend=false){
+
+    const reviewCard = document.createElement("div");
+    reviewCard.className = "review-card";
+
+    reviewCard.innerHTML = `
+      <div class="stars">★★★★★</div>
+      <p>“${review.message}”</p>
+      <h4>— ${review.name}</h4>
+    `;
+
+    if(prepend){
+      container.prepend(reviewCard);
+    } else {
+      container.appendChild(reviewCard);
+    }
+  }
+
+  const savedReviews = getReviews();
+
+  savedReviews.forEach(review => {
+    renderReview(review);
+  });
+
   form.addEventListener("submit", function(e){
+
     e.preventDefault();
 
     const name = document.getElementById("reviewName").value.trim();
@@ -208,16 +242,16 @@ document.addEventListener("DOMContentLoaded", function(){
       return;
     }
 
-    const reviewCard = document.createElement("div");
-    reviewCard.className = "review-card";
+    const newReview = {
+      name:name,
+      message:message
+    };
 
-    reviewCard.innerHTML = `
-      <div class="stars">★★★★★</div>
-      <p>“${message}”</p>
-      <h4>— ${name}</h4>
-    `;
+    renderReview(newReview, true);
 
-    container.prepend(reviewCard);
+    const updatedReviews = [newReview, ...getReviews()];
+
+    saveReviews(updatedReviews);
 
     form.reset();
 
@@ -226,5 +260,6 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 </body>
+
 
 </html>
