@@ -109,6 +109,63 @@
 
 </section>
 
+
+<section class="reviews-section">
+
+  <h2>Professional Journeys</h2>
+
+  <div class="review-grid" id="reviewContainer">
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>
+        “The Oracle Fusion Application sessions are highly practical and professionally structured.
+        The real-time business scenarios made the learning experience exceptional.”
+      </p>
+      <h4>— Enterprise Learner</h4>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>
+        “A premium learning platform with excellent guidance on project management and Oracle Fusion workflows.
+        The implementation concepts are explained very clearly.”
+      </p>
+      <h4>— Corporate Professional</h4>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>
+        “The content quality, presentation style, and practical insights provided by Abyunnati
+        helped improve my enterprise application understanding significantly.”
+      </p>
+      <h4>— Working Consultant</h4>
+    </div>
+
+  </div>
+
+  <div class="review-form-wrapper">
+
+    <h3>Share Your Experience</h3>
+
+    <form class="review-form" id="reviewForm">
+
+      <input type="text" id="reviewName" placeholder="Your Name" required>
+
+      <input type="email" placeholder="Your Email" required>
+
+      <textarea id="reviewMessage" placeholder="Write your review here..." rows="5" required></textarea>
+
+      <button type="submit">Submit Review</button>
+
+    </form>
+
+  </div>
+
+</section>
+
+
 <footer class="footer">
 
   <div class="footer-line"></div>
@@ -134,5 +191,107 @@
 
 </footer>
 
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async function(){
+
+  // ============================
+  // SUPABASE CONFIGURATION
+  // Reviews are permanently stored in Supabase cloud database
+  // and displayed to all website visitors
+  // Replace below with your values
+  // ============================
+
+  const SUPABASE_URL = "https://hhswjoygagicsowklbnw.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_CtoCh24S9096Nmk6FRzCcQ_CDYHsjML";
+
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  const form = document.getElementById("reviewForm");
+  const container = document.getElementById("reviewContainer");
+
+  container.innerHTML = "";
+
+  function renderReview(review, prepend=false){
+
+    const reviewCard = document.createElement("div");
+    reviewCard.className = "review-card";
+
+    reviewCard.innerHTML = `
+      <div class="stars">★★★★★</div>
+      <p>“${review.message}”</p>
+      <h4>— ${review.name}</h4>
+    `;
+
+    if(prepend){
+      container.prepend(reviewCard);
+    } else {
+      container.appendChild(reviewCard);
+    }
+  }
+
+  async function loadReviews(){
+
+    const { data, error } = await supabaseClient
+      .from("reviews")
+      .select("*")
+      .order("id", { ascending: false });
+
+    if(error){
+      console.error(error);
+      return;
+    }
+
+    data.forEach(review => {
+      renderReview(review);
+    });
+  }
+
+  await loadReviews();
+
+  form.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const name = document.getElementById("reviewName").value.trim();
+    const message = document.getElementById("reviewMessage").value.trim();
+
+    if(!name || !message){
+      return;
+    }
+
+    const newReview = {
+      name: name,
+      message: message
+    };
+
+    const { error } = await supabaseClient
+      .from("reviews")
+      .insert([newReview]);
+
+    if(error){
+      console.error(error);
+      alert("Unable to save review.");
+      return;
+    }
+
+    renderReview(newReview, true);
+
+    form.reset();
+
+  });
+
+});
+</script>
+
 </body>
+
+
 </html>
