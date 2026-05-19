@@ -193,19 +193,29 @@
 
 
 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", async function(){
+
+  // ============================
+  // SUPABASE CONFIGURATION
+  // Replace below with your values
+  // ============================
+
+  const SUPABASE_URL = "https://hhswjoygagicsowklbnw.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_CtoCh24S9096Nmk6FRzCcQ_CDYHsjML";
+
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
   const form = document.getElementById("reviewForm");
   const container = document.getElementById("reviewContainer");
 
-  function saveReviews(reviews){
-    localStorage.setItem("abyunnati_reviews", JSON.stringify(reviews));
-  }
-
-  function getReviews(){
-    return JSON.parse(localStorage.getItem("abyunnati_reviews")) || [];
-  }
+  container.innerHTML = "";
 
   function renderReview(review, prepend=false){
 
@@ -225,13 +235,26 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
 
-  const savedReviews = getReviews();
+  async function loadReviews(){
 
-  savedReviews.forEach(review => {
-    renderReview(review);
-  });
+    const { data, error } = await supabaseClient
+      .from("reviews")
+      .select("*")
+      .order("id", { ascending: false });
 
-  form.addEventListener("submit", function(e){
+    if(error){
+      console.error(error);
+      return;
+    }
+
+    data.forEach(review => {
+      renderReview(review);
+    });
+  }
+
+  await loadReviews();
+
+  form.addEventListener("submit", async function(e){
 
     e.preventDefault();
 
@@ -243,15 +266,21 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     const newReview = {
-      name:name,
-      message:message
+      name: name,
+      message: message
     };
 
+    const { error } = await supabaseClient
+      .from("reviews")
+      .insert([newReview]);
+
+    if(error){
+      console.error(error);
+      alert("Unable to save review.");
+      return;
+    }
+
     renderReview(newReview, true);
-
-    const updatedReviews = [newReview, ...getReviews()];
-
-    saveReviews(updatedReviews);
 
     form.reset();
 
@@ -259,6 +288,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 });
 </script>
+
 </body>
 
 
