@@ -1,97 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abyunnati Payments & Receipts</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Abyunnati | Oracle Fusion Application</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 </head>
+
 <body>
 
-<div class="login-container" id="loginContainer">
-    <div class="login-card">
-        <img src="assets/logo.png" class="logo-small" alt="Logo">
-        <h2>Abyunnati Login</h2>
+<header class="header">
 
-        <input type="text" id="userid" placeholder="User ID">
-        <input type="password" id="password" placeholder="Password">
+  <div class="top-section">
 
-        <button onclick="login()">Login</button>
-
-        <p id="loginError"></p>
-    </div>
-</div>
-
-<div class="app-container hidden" id="appContainer">
-
-    <header>
-        <img src="assets/logo.png" class="logo" alt="Logo">
-        <h1>Payments & Receipts</h1>
-    </header>
-
-    <div class="receipt-card" id="receiptArea">
-
-        <div class="title-section">
-            <h2>Abyunnati</h2>
-            <p>Payment Receipt</p>
-        </div>
-
-        <div class="form-grid">
-
-            <div>
-                <label>Receipt Number</label>
-                <input type="text" id="receiptNumber" readonly>
-            </div>
-
-            <div>
-                <label>Date</label>
-                <input type="date" id="date">
-            </div>
-
-            <div>
-                <label>Name</label>
-                <input type="text" id="name">
-            </div>
-
-            <div>
-                <label>Number</label>
-                <input type="text" id="number">
-            </div>
-
-            <div>
-                <label>Batch ID</label>
-                <input type="text" id="batchId">
-            </div>
-
-            <div>
-                <label>Amount</label>
-                <input type="number" id="amount">
-            </div>
-
-            <div>
-                <label>Payment Mode</label>
-                <select id="paymentMode">
-                    <option>Cash</option>
-                    <option>UPI</option>
-                    <option>Bank Transfer</option>
-                    <option>Credit Card</option>
-                    <option>Debit Card</option>
-                </select>
-            </div>
-
-        </div>
-
-        <div class="button-group">
-            <button onclick="generateReceipt()">Generate Receipt</button>
-            <button onclick="downloadPDF()">Download PDF</button>
-            <button onclick="logout()">Logout</button>
-        </div>
-
+    <div class="logo-section">
+      <img src="logo.png" alt="Abyunnati Logo" class="logo"/>
     </div>
 
-</div>
+    <div class="platform-title">
+      Premium Online Learning Platform
+    </div>
 
-<script src="script.js"></script>
+  </div>
+
+  <div class="hero-content">
+
+    <h1>Oracle Fusion Application</h1>
+
+    <p class="hero-text">
+      Delivering premium corporate learning experiences with practical Oracle Fusion Application knowledge,
+      project management excellence, and enterprise-focused implementation strategies designed for modern enterprises.
+    </p>
+
+  </div>
+
+</header>
+
+<section class="learn-section">
+
+  <h2>What You Learn</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>Conceptual Knowledge</h3>
+      <p>
+        Build strong enterprise foundations with modern frameworks,
+        governance strategies, methodologies, and digital transformation concepts.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Project Management</h3>
+      <p>
+        Understand planning, execution, monitoring, stakeholder engagement,
+        and delivery techniques aligned with corporate standards.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Oracle Fusion Application</h3>
+      <p>
+        Gain practical Oracle Fusion knowledge including workflows,
+        modules, integrations, reporting, and enterprise implementation practices.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Business Use Cases</h3>
+      <p>
+        Explore realistic enterprise scenarios, business challenges,
+        operational processes, and strategic decision-making approaches.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Practical Implementation</h3>
+      <p>
+        Learn hands-on implementation strategies, optimization methods,
+        execution techniques, and enterprise deployment practices.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="about-section">
+
+  <div class="about-card">
+
+    <h2>About Abyunnati</h2>
+
+    <p>
+      Abyunnati empowers professionals with premium online learning programs focused on
+      Oracle Fusion enterprise application expertise and project management excellence.
+      Our programs combine conceptual depth, business relevance, and practical implementation
+      experience to support career growth in modern corporate environments.
+    </p>
+
+  </div>
+
+</section>
+
+
+<section class="reviews-section">
+
+  <h2>Professional Journeys</h2>
+
+  <div class="review-grid" id="reviewContainer">
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>
+        “The Oracle Fusion Application sessions are highly practical and professionally structured.
+        The real-time business scenarios made the learning experience exceptional.”
+      </p>
+      <h4>— Enterprise Learner</h4>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>
+        “A premium learning platform with excellent guidance on project management and Oracle Fusion workflows.
+        The implementation concepts are explained very clearly.”
+      </p>
+      <h4>— Corporate Professional</h4>
+    </div>
+
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p>
+        “The content quality, presentation style, and practical insights provided by Abyunnati
+        helped improve my enterprise application understanding significantly.”
+      </p>
+      <h4>— Working Consultant</h4>
+    </div>
+
+  </div>
+
+  <div class="review-form-wrapper">
+
+    <h3>Share Your Experience</h3>
+
+    <form class="review-form" id="reviewForm">
+
+      <input type="text" id="reviewName" placeholder="Your Name" required>
+
+      <input type="email" placeholder="Your Email" required>
+
+      <textarea id="reviewMessage" placeholder="Write your review here..." rows="5" required></textarea>
+
+      <button type="submit">Submit Review</button>
+
+    </form>
+
+  </div>
+
+</section>
+
+
+
+<section class="enroll-section">
+  <div class="enroll-card">
+    <h2>Enroll Now</h2>
+    <div class="fee-banner">Fee: ₹25,000/-</div>
+    <form class="enroll-form">
+      <input type="text" placeholder="Name" required>
+      <input type="tel" placeholder="Mobile" required>
+      <input type="email" placeholder="E-Mail" required>
+      <button type="submit">Enroll</button>
+    </form>
+  </div>
+</section>
+
+
+<footer class="footer">
+
+  <div class="footer-line"></div>
+
+  <div class="contact-info">
+
+    <div class="contact-item">
+      <span class="icon phone"><i class="fa-solid fa-phone"></i></span>
+      <span>+91 94933 94288</span>
+    </div>
+
+    <div class="contact-item">
+      <span class="icon mail"><i class="fa-solid fa-envelope"></i></span>
+      <span>support@abyunnati.com</span>
+    </div>
+
+    <div class="contact-item">
+      <span class="icon web"><i class="fa-solid fa-globe"></i></span>
+      <span>www.abyunnati.com</span>
+    </div>
+
+  </div>
+
+</footer>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async function(){
+
+  // ============================
+  // SUPABASE CONFIGURATION
+  // Replace below with your values
+  // ============================
+
+  const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  const form = document.getElementById("reviewForm");
+  const container = document.getElementById("reviewContainer");
+
+  container.innerHTML = "";
+
+  function renderReview(review, prepend=false){
+
+    const reviewCard = document.createElement("div");
+    reviewCard.className = "review-card";
+
+    reviewCard.innerHTML = `
+      <div class="stars">★★★★★</div>
+      <p>“${review.message}”</p>
+      <h4>— ${review.name}</h4>
+    `;
+
+    if(prepend){
+      container.prepend(reviewCard);
+    } else {
+      container.appendChild(reviewCard);
+    }
+  }
+
+  async function loadReviews(){
+
+    const { data, error } = await supabaseClient
+      .from("reviews")
+      .select("*")
+      .order("id", { ascending: false });
+
+    if(error){
+      console.error(error);
+      return;
+    }
+
+    data.forEach(review => {
+      renderReview(review);
+    });
+  }
+
+  await loadReviews();
+
+  form.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const name = document.getElementById("reviewName").value.trim();
+    const message = document.getElementById("reviewMessage").value.trim();
+
+    if(!name || !message){
+      return;
+    }
+
+    const newReview = {
+      name: name,
+      message: message
+    };
+
+    const { error } = await supabaseClient
+      .from("reviews")
+      .insert([newReview]);
+
+    if(error){
+      console.error(error);
+      alert("Unable to save review.");
+      return;
+    }
+
+    renderReview(newReview, true);
+
+    form.reset();
+
+  });
+
+});
+</script>
+
 </body>
+
+
 </html>

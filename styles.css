@@ -362,3 +362,10 @@ body{
     font-size:1.6rem;
   }
 }
+
+.enroll-section{padding:60px 20px}
+.enroll-card{max-width:700px;margin:auto;background:#fff;padding:32px;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.08);text-align:center}
+.fee-banner{font-size:1.4rem;font-weight:700;margin:16px 0 24px}
+.enroll-form{display:flex;flex-direction:column;gap:14px}
+.enroll-form input{padding:14px;border:1px solid #ddd;border-radius:10px}
+.enroll-form button{padding:14px;border:none;border-radius:10px;cursor:pointer;font-weight:600}
