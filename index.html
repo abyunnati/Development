@@ -112,7 +112,7 @@
 
 <section class="reviews-section">
 
-  <h2>Professional Journeys</h2>
+  <h2>Customer Reviews</h2>
 
   <div class="review-grid" id="reviewContainer">
 
@@ -153,7 +153,7 @@
 
       <input type="text" id="reviewName" placeholder="Your Name" required>
 
-      <input type="email" placeholder="Your Email" required>
+      <input type="email" id="reviewEmail" placeholder="Your Email" required>
 
       <textarea id="reviewMessage" placeholder="Write your review here..." rows="5" required></textarea>
 
@@ -163,21 +163,6 @@
 
   </div>
 
-</section>
-
-
-
-<section class="enroll-section">
-  <div class="enroll-card">
-    <h2>Enroll Now</h2>
-    <div class="fee-banner">Course Fee: ₹25,000/-</div>
-    <form class="enroll-form">
-      <input type="text" placeholder="Name" required>
-      <input type="tel" placeholder="Mobile" required>
-      <input type="email" placeholder="E-Mail" required>
-      <button type="submit">Enroll</button>
-    </form>
-  </div>
 </section>
 
 
@@ -206,105 +191,114 @@
 
 </footer>
 
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+/*
+  Replace the Firebase configuration below with your own Firebase project details.
+  This setup stores reviews permanently in Firebase Firestore,
+  making them visible to all website visitors.
+*/
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+const form = document.getElementById("reviewForm");
+const container = document.getElementById("reviewContainer");
 
-<script>
-document.addEventListener("DOMContentLoaded", async function(){
+function renderReview(review, prepend = false) {
 
-  // ============================
-  // SUPABASE CONFIGURATION
-  // Replace below with your values
-  // ============================
+  const reviewCard = document.createElement("div");
+  reviewCard.className = "review-card";
 
-  const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
-  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+  reviewCard.innerHTML = `
+    <div class="stars">★★★★★</div>
+    <p>“${review.message}”</p>
+    <h4>— ${review.name}</h4>
+  `;
 
-  const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
-
-  const form = document.getElementById("reviewForm");
-  const container = document.getElementById("reviewContainer");
-
-  container.innerHTML = "";
-
-  function renderReview(review, prepend=false){
-
-    const reviewCard = document.createElement("div");
-    reviewCard.className = "review-card";
-
-    reviewCard.innerHTML = `
-      <div class="stars">★★★★★</div>
-      <p>“${review.message}”</p>
-      <h4>— ${review.name}</h4>
-    `;
-
-    if(prepend){
-      container.prepend(reviewCard);
-    } else {
-      container.appendChild(reviewCard);
-    }
+  if (prepend) {
+    container.prepend(reviewCard);
+  } else {
+    container.appendChild(reviewCard);
   }
+}
 
-  async function loadReviews(){
+async function loadReviews() {
 
-    const { data, error } = await supabaseClient
-      .from("reviews")
-      .select("*")
-      .order("id", { ascending: false });
+  try {
 
-    if(error){
-      console.error(error);
-      return;
-    }
+    const reviewsQuery = query(
+      collection(db, "reviews"),
+      orderBy("createdAt", "desc")
+    );
 
-    data.forEach(review => {
-      renderReview(review);
+    const querySnapshot = await getDocs(reviewsQuery);
+
+    querySnapshot.forEach((doc) => {
+      renderReview(doc.data());
     });
+
+  } catch (error) {
+    console.error("Error loading reviews:", error);
+  }
+}
+
+loadReviews();
+
+form.addEventListener("submit", async function (e) {
+
+  e.preventDefault();
+
+  const name = document.getElementById("reviewName").value.trim();
+  const email = document.getElementById("reviewEmail").value.trim();
+  const message = document.getElementById("reviewMessage").value.trim();
+
+  if (!name || !email || !message) {
+    return;
   }
 
-  await loadReviews();
+  const newReview = {
+    name,
+    email,
+    message,
+    createdAt: serverTimestamp()
+  };
 
-  form.addEventListener("submit", async function(e){
+  try {
 
-    e.preventDefault();
-
-    const name = document.getElementById("reviewName").value.trim();
-    const message = document.getElementById("reviewMessage").value.trim();
-
-    if(!name || !message){
-      return;
-    }
-
-    const newReview = {
-      name: name,
-      message: message
-    };
-
-    const { error } = await supabaseClient
-      .from("reviews")
-      .insert([newReview]);
-
-    if(error){
-      console.error(error);
-      alert("Unable to save review.");
-      return;
-    }
+    await addDoc(collection(db, "reviews"), newReview);
 
     renderReview(newReview, true);
 
     form.reset();
 
-  });
+    alert("Review submitted successfully.");
 
+  } catch (error) {
+    console.error("Error saving review:", error);
+    alert("Unable to submit review. Please check Firebase configuration.");
+  }
 });
 </script>
 
 </body>
-
-
 </html>
